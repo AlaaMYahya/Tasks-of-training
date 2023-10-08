@@ -8,3 +8,4 @@ export const AppDataSource = new DataSource({
   password: "",
   database: "demo",
 });
+
