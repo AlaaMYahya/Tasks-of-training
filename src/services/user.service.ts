@@ -1,38 +1,47 @@
-// import { Inject, Service } from "typedi";
-// import { InjectRepository } from "typeorm-typedi-extensions";
-import { UserRepository } from "../repositories/user.repository";
 import { User } from "../entities/user.entity";
-import { CreateUserDto, UpdatUserDto } from "../dto/createUserDto";
+import {
+  //  CreateUserDto,
+   UpdatUserDto } from "../dto/createUserDto";
+import { AppDataSource } from "../config/data-source";
+import bcrypt from "bcrypt";
 
-// @Service()
-// export 
+
 class UserService {
-  // constructor(@InjectRepository(User) private readonly userRepository: UserRepository) {}
-  
-  // userRepository =  ------- UserRepository(User);
+  userRepository = AppDataSource.getRepository(User);
 
-  async getAllUsers(): Promise<User[]> 
-  {
+  async hashPassword (password : string): Promise<string>{
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    return hashedPassword;
+  }
+
+  async getAllUsers(): Promise<User[]> {
     return await this.userRepository.find();
   }
 
-   async getUserById(id: number)
-  //  : Promise<User | undefined> 
-  {
-    const user = await this.userRepository.findOne({where: {id}});
-    return user; 
+  async getUserById(
+    id: number, //  : Promise<User | undefined>
+  ) {
+    const user = await this.userRepository.findOne({ where: { id } });
+    return user;
   }
 
-  async createUser(user: CreateUserDto): Promise<User> {
-    return await this.userRepository.save(user);   
-     
+  async createUser(username: string, email: string, password:string, bio:string): Promise<User> {
+    const user = new User();
+    user.username = username;
+    user.email = email;
+    user.password = password;
+    user.bio = bio;
+    return this.userRepository.save(user);
+    return await this.userRepository.save(user);
   }
-  
 
-  async updateUser(id: number, updatedUser: UpdatUserDto ): Promise<User | undefined> {
-    // Partial<User>
+  async updateUser(
+    id: number,
+    updatedUser: UpdatUserDto,
+  ): Promise<User | undefined> {
     const user = await this.userRepository.save({ id, ...updatedUser });
-    return user; 
+    return user;
   }
 
   async deleteUser(id: number): Promise<void> {
@@ -40,6 +49,4 @@ class UserService {
   }
 }
 
-
-const userService = new UserService();
-export default userService;
+export const userService = new UserService();

@@ -8,18 +8,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userService = void 0;
-// import { Inject, Service } from "typedi";
-// import { InjectRepository } from "typeorm-typedi-extensions";
-// import { UserRepository } from "../repositories/user.repository";
 const user_entity_1 = require("../entities/user.entity");
 const data_source_1 = require("../config/data-source");
-// @Service()
-// export 
+const bcrypt_1 = __importDefault(require("bcrypt"));
 class UserService {
     constructor() {
         this.userRepository = data_source_1.AppDataSource.getRepository(user_entity_1.User);
+    }
+    hashPassword(password) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const saltRounds = 10;
+            const hashedPassword = yield bcrypt_1.default.hash(password, saltRounds);
+            return hashedPassword;
+        });
     }
     getAllUsers() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -32,14 +38,19 @@ class UserService {
             return user;
         });
     }
-    createUser(user) {
+    createUser(username, email, password, bio) {
         return __awaiter(this, void 0, void 0, function* () {
+            const user = new user_entity_1.User();
+            user.username = username;
+            user.email = email;
+            user.password = password;
+            user.bio = bio;
+            return this.userRepository.save(user);
             return yield this.userRepository.save(user);
         });
     }
     updateUser(id, updatedUser) {
         return __awaiter(this, void 0, void 0, function* () {
-            // Partial<User>
             const user = yield this.userRepository.save(Object.assign({ id }, updatedUser));
             return user;
         });

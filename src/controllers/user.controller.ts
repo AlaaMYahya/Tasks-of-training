@@ -1,40 +1,50 @@
-import { JsonController, Get, Post, Put, Delete, Param, Body } from "routing-controllers";
-import  userService  from "../services/user.service"
+import {
+  JsonController,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Param,
+  Body,
+} from "routing-controllers";
+import { userService } from "../services/user.service";
 import { User } from "../entities/user.entity";
 import { CreateUserDto, UpdatUserDto } from "../dto/createUserDto";
-// import { Inject } from  "typedi";
 
-@JsonController('/users')
+@JsonController("/users")
 export class UserController {
-  // constructor( private userService: UserService) {}
-  // userService = 
-
+  
   @Get("/")
-  async getAllUsers() : Promise<User[]>  {
+  async getAllUsers(): Promise<User[]> {
     // return "You can get the users";
-    return this.userService.getAllUsers();
+    return userService.getAllUsers();
   }
 
   @Get("/:id")
-  async getUserById(@Param("id") id: number)
-//   : Promise<User | undefined>
-   {
-    return this.userService.getUserById(id);
+  async getUserById(
+    @Param("id") id: number, //   : Promise<User | undefined>
+  ) {
+    return userService.getUserById(id);
   }
 
   @Post("/")
-  createUser(@Body() user: CreateUserDto) : Promise<User> 
-  {
-    return this.userService.createUser(user);
+  async createUser(@Body() user: CreateUserDto): Promise<User> {
+    const { username, email, password, bio} = user;
+    const hashedPassword = await userService.hashPassword(password)
+    const Addusers = await userService.createUser( username, email, hashedPassword, bio);
+    return  Addusers;    
   }
 
   @Put("/:id")
-  updateUser(@Param("id") id: number, @Body() updatedUser: UpdatUserDto ): Promise<User | undefined> {
-    return this.userService.updateUser(id, updatedUser);
+  updateUser(
+    @Param("id") id: number,
+    @Body() updatedUser: UpdatUserDto,
+  ): Promise<User | undefined> {
+    return userService.updateUser(id, updatedUser);
   }
 
   @Delete("/:id")
-  deleteUser(@Param("id") id: number): Promise<void>  {
-    return this.userService.deleteUser(id);
+  deleteUser(@Param("id") id: number): Promise<void> {
+    return userService.deleteUser(id);
   }
 }

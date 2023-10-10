@@ -38,7 +38,12 @@ let UserController = class UserController {
         });
     }
     createUser(user) {
-        return user_service_1.userService.createUser(user);
+        return __awaiter(this, void 0, void 0, function* () {
+            const { username, email, password, bio } = user;
+            const hashedPassword = yield user_service_1.userService.hashPassword(password);
+            const Addusers = yield user_service_1.userService.createUser(username, email, hashedPassword, bio);
+            return Addusers;
+        });
     }
     updateUser(id, updatedUser) {
         return user_service_1.userService.updateUser(id, updatedUser);
@@ -84,5 +89,5 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "deleteUser", null);
 exports.UserController = UserController = __decorate([
-    (0, routing_controllers_1.JsonController)('/users')
+    (0, routing_controllers_1.JsonController)("/users")
 ], UserController);
