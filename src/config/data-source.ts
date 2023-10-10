@@ -1,6 +1,5 @@
 import { DataSource } from "typeorm";
-import { User } from '../entities/user.entity';
-import { AddPasswordToUser1696848807636 } from "../migration/1696848807636-AddPasswordToUser";
+import path from "path";
 
 
 export const AppDataSource = new DataSource({
@@ -10,7 +9,8 @@ export const AppDataSource = new DataSource({
   username: "root",
   password: "",
   database: "demo",
-  entities: [User],
-  migrations:[AddPasswordToUser1696848807636],
+  entities: [path.join(__dirname, "../entities", "*.*")],
+  migrations: [path.join(__dirname, "../migration", "*.*")],
+  
 });
 
