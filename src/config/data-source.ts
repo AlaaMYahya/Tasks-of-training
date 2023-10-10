@@ -9,8 +9,8 @@ export const AppDataSource = new DataSource({
   username: "root",
   password: "",
   database: "demo",
-  entities: [path.join(__dirname, "../entities", "*.*")],
-  migrations: [path.join(__dirname, "../migration", "*.*")],
+  entities: [path.join(__dirname, "../entities", "*.js")],
+  migrations: [path.join(__dirname, "../migration", "*.js")],
   
 });
 
