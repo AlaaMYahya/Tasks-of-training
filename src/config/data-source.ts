@@ -2,6 +2,7 @@ import { DataSource } from "typeorm";
 import { User } from '../entities/user.entity';
 import { AddPasswordToUser1696848807636 } from "../migration/1696848807636-AddPasswordToUser";
 
+
 export const AppDataSource = new DataSource({
   type: "mysql",
   host: "localhost",

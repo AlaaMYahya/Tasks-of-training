@@ -33,7 +33,6 @@ class UserService {
     user.password = password;
     user.bio = bio;
     return this.userRepository.save(user);
-    return await this.userRepository.save(user);
   }
 
   async updateUser(
