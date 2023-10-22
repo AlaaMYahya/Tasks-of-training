@@ -21,5 +21,11 @@ export class User {
 
   @Column({ nullable: true })
   bio?: string;
+
+  @Column()
+  accesshToken: string;
+
+  @Column()
+  refreshToken?: string;
   
 }

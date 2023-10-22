@@ -35,4 +35,12 @@ export class UpdatUserDto {
   @IsString()
   @IsOptional()
   bio?: string;
+
+  @IsString()
+  @IsOptional()
+  accessToken?: string;
+
+  @IsString()
+  @IsOptional()
+  refreshToken?: string;
 }
