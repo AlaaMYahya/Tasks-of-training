@@ -26,6 +26,7 @@ class UserService {
     return user;
   }
 
+  
   async createUser(username: string, email: string, password:string, bio:string): Promise<User> {
     const user = new User();
     user.username = username;
